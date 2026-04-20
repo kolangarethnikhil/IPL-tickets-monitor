@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Ticket Alert - Setup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            color: #333;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .emoji {
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .output {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 10px;
+        }
+        
+        .code-block {
+            background: #1f2937;
+            color: #10b981;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="emoji">🏏</div>
+            <h1>IPL Ticket Alert</h1>
+            <p>Setup your monitoring preferences</p>
+        </div>
+        
+        <form id="setupForm">
+            <div class="form-group">
+                <label>🏏 Favorite Team</label>
+                <select id="team">
+                    <option value="any">Any Team</option>
+                    <option value="Chennai Super Kings" selected>Chennai Super Kings</option>
+                    <option value="Mumbai Indians">Mumbai Indians</option>
+                    <option value="Royal Challengers Bangalore">RCB</option>
+                    <option value="Kolkata Knight Riders">KKR</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>🏙️ City</label>
+                <select id="city">
+                    <option value="any">Any City</option>
+                    <option value="Chennai" selected>Chennai</option>
+                    <option value="Mumbai">Mumbai</option>
+                    <option value="Bangalore">Bangalore</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>💰 Max Price</label>
+                <select id="maxPrice">
+                    <option value="0">Any Price</option>
+                    <option value="2000">Under ₹2,000</option>
+                    <option value="5000" selected>Under ₹5,000</option>
+                    <option value="10000">Under ₹10,000</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn">Generate Setup</button>
+        </form>
+        
+        <div id="output" class="output">
+            <h3>Your Configuration:</h3>
+            <div class="code-block" id="configJson"></div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('setupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const config = {
+                team: document.getElementById('team').value,
+                city: document.getElementById('city').value,
+                max_price: parseInt(document.getElementById('maxPrice').value)
+            };
+            
+            document.getElementById('configJson').textContent = JSON.stringify(config, null, 2);
+            document.getElementById('output').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
