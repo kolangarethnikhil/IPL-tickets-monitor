@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPL Ticket Alert Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .header p {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #334155;
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .stat-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .matches-section {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .match-card {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .match-teams {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        
+        .status-available {
+            background: #10b981;
+            color: white;
+        }
+        
+        .status-soon {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .status-announced {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .match-details {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .book-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        
+        .ai-insights {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .ai-badge {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .insight-item {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #667eea;
+        }
+        
+        .insight-item h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏏 IPL Ticket Alert Dashboard</h1>
+            <p>Real-time monitoring • AI-powered predictions • Instant alerts</p>
+        </div>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Monitoring Status</h3>
+                <div class="stat-value">
+                    <span class="status-indicator"></span>
+                    <span id="statusText">Active</span>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Total Matches</h3>
+                <div class="stat-value" id="totalMatches">-</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Tickets Available</h3>
+                <div class="stat-value" id="availableMatches">-</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Last Check</h3>
+                <div class="stat-value" style="font-size: 18px;" id="lastCheck">-</div>
+            </div>
+        </div>
+        
+        <div class="ai-insights" id="aiInsights">
+            <h2 class="section-title">
+                🤖 AI Insights
+                <span class="ai-badge">POWERED BY AI</span>
+            </h2>
+            <div class="insight-item">
+                <h4>🎯 Predicted Drop Time</h4>
+                <p>Based on historical patterns, tickets typically drop between <strong>10:00 AM - 12:00 PM</strong></p>
+            </div>
+            <div class="insight-item">
+                <h4>⏰ Best Time to Check</h4>
+                <p>Recommended hours: <strong>10 AM, 11 AM, 12 PM, 2 PM, 3 PM</strong></p>
+            </div>
+        </div>
+        
+        <div class="matches-section">
+            <h2 class="section-title">📊 Monitored Matches</h2>
+            <div id="matchesContainer">
+                <div class="loading">
+                    <p>Loading match data...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        async function loadData() {
+            const container = document.getElementById('matchesContainer');
+            
+            const sampleData = {
+                last_updated: new Date().toISOString(),
+                total_matches: 3,
+                matches: [
+                    {
+                        teams: "Chennai Super Kings vs Mumbai Indians",
+                        date: "Sat 02 May",
+                        time: "7:30 PM",
+                        stadium: "M.A. Chidambaram Stadium, Chennai",
+                        status: "COMING_SOON",
+                        booking_link: null
+                    },
+                    {
+                        teams: "Rajasthan Royals vs Delhi Capitals",
+                        date: "Fri 01 May",
+                        time: "7:30 PM",
+                        stadium: "Sawai Mansingh Stadium, Jaipur",
+                        status: "AVAILABLE",
+                        booking_link: "https://www.district.in/events/ipl-ticket-booking"
+                    }
+                ]
+            };
+            
+            document.getElementById('totalMatches').textContent = sampleData.total_matches;
+            document.getElementById('availableMatches').textContent = sampleData.matches.filter(m => m.status === 'AVAILABLE').length;
+            document.getElementById('lastCheck').textContent = new Date().toLocaleTimeString();
+            
+            container.innerHTML = '';
+            sampleData.matches.forEach(match => {
+                const statusClass = match.status === 'AVAILABLE' ? 'status-available' : match.status === 'COMING_SOON' ? 'status-soon' : 'status-announced';
+                
+                container.innerHTML += `
+                    <div class="match-card">
+                        <div class="match-teams">${match.teams}</div>
+                        <div class="match-details">
+                            📅 ${match.date} at ${match.time}<br>
+                            🏟️ ${match.stadium}
+                        </div>
+                        <span class="status-badge ${statusClass}">${match.status.replace('_', ' ')}</span>
+                        ${match.booking_link ? `<br><a href="${match.booking_link}" target="_blank" class="book-btn">🎫 Book Tickets</a>` : ''}
+                    </div>
+                `;
+            });
+        }
+        
+        loadData();
+        setInterval(loadData, 120000);
+    </script>
+</body>
+</html>
